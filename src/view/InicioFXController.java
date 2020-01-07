@@ -47,8 +47,8 @@ public class InicioFXController extends ControladorGeneral{
      * Botón Ayuda.
      * Ayuda button.
      */
- //   @FXML
-   // private Button btnAyuda;
+    //   @FXML
+    // private Button btnAyuda;
     /**
      * Campo de texto Nombre de usuario.
      * Nombre de usuario text field.
@@ -161,18 +161,18 @@ public class InicioFXController extends ControladorGeneral{
         btnSalir.setOnKeyPressed(this::keyPressSalir);
         /* MODIFICACIÓN DIN 14/11/2019*/
         KeyCombination keyCombination = new KeyCodeCombination(KeyCode.F1);
-       // Runnable run = ()-> btnAyuda.fire();
+        // Runnable run = ()-> btnAyuda.fire();
         //scene.getAccelerators().put(keyCombination, run);
 //        btnAyuda.setOnAction(this::btnAyudaOnClick);
-        btnRegistrar.setMnemonicParsing(true);
-        btnRegistrar.setText("_Registrar");
-        btnAcceder.setMnemonicParsing(true);
-        btnAcceder.setText("_Acceder");
-        btnSalir.setMnemonicParsing(true);
-        btnSalir.setText("_Salir");
-        tfNombreUsuario.focusedProperty().addListener(this::focusChangedNombre);
-        tfContra.focusedProperty().addListener(this::focusChangedContra);
-        stage.show();
+btnRegistrar.setMnemonicParsing(true);
+btnRegistrar.setText("_Registrar");
+btnAcceder.setMnemonicParsing(true);
+btnAcceder.setText("_Acceder");
+btnSalir.setMnemonicParsing(true);
+btnSalir.setText("_Salir");
+tfNombreUsuario.focusedProperty().addListener(this::focusChangedNombre);
+tfContra.focusedProperty().addListener(this::focusChangedContra);
+stage.show();
     }
     /**
      * Añade las propiedades a los controladores de la escena.
@@ -204,7 +204,7 @@ public class InicioFXController extends ControladorGeneral{
     /**
      * Comprueba que los controladores label estén bien informados.
      * Check that label controllers are well informed.
-     * @param observable 
+     * @param observable
      * @param oldValue Valor antiguo. / Old value.
      * @param newValue Valor nuevo. / New value.
      */
@@ -249,7 +249,7 @@ public class InicioFXController extends ControladorGeneral{
         }else if(key.getCode().equals(KeyCode.ESCAPE)){
             btnSalir.fire();
         }else if(key.getCode().equals(KeyCode.F1)){
-           // btnAyuda.fire();
+            // btnAyuda.fire();
         }
     }
     /**
@@ -307,68 +307,83 @@ public class InicioFXController extends ControladorGeneral{
         String nombre = tfNombreUsuario.getText().toString();
         String contra = tfContra.getText().toString();
         try{
-            showErrorAlert(clienteLogic.findAll().size()+" en total");
-            UserBean user = userLogic.iniciarSesion(nombre, contra);
-            //UserBean user=new UserBean(1,"admin3","administrador@gmail.com","Administrador",ENABLED,ADMIN,"F688ED3E171E7BAD7563C7461404BAB2",new Date(),new Date());
-           // userLogic.updateUser(user);
-            if(user != null){
-                lblNombreUsuario.setTextFill(Color.web("black"));
-                lblContra.setTextFill(Color.web("black"));
-                try{
-                    FXMLLoader loader = new FXMLLoader(getClass()
-                            .getResource("principal.fxml"));
-                    
-                    Parent root = (Parent)loader.load();
-                    /*
-                    PrincipalFXController controller =
-                            ((PrincipalFXController)loader.getController());
-                    
-                    controller.setUser(user);
-                    controller.initStage(root);
-                    tfContra.setText("");
-                    */
-                    showErrorAlert("todo a ido bien!!");
-                }catch(IOException e){
-                    showErrorAlert("Error al cargar la ventana de Login.");
-                }
-            }else{
-                showErrorAlert("Nombre de usuario o contraseña incorrecto.");
-            }
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("tienda_apuntes.fxml"));
+            Parent root = (Parent)loader.load();
+            TiedaApuntesFXController controller =
+                    ((TiedaApuntesFXController)loader.getController());
             
-            
-            /*
-        }catch(PasswordException e){
-            showErrorAlert("Contraseña incorrecta.");
-            
-           */ /* MODIFICACIÓN DIN 13/11/2019*//*
-            tfContra.requestFocus();
-            errorContra = true;
-            
-            lblContra.setTextFill(Color.web("red"));
-        }catch(LoginIDException e){
-            showErrorAlert("Nombre de usuario incorrecto.");
-            
-            *//* MODIFICACIÓN DIN 13/11/2019*//*
-            tfNombreUsuario.requestFocus();
-            errorNombre = true;
-            errorContra = true;
-            
-            lblNombreUsuario.setTextFill(Color.web("red"));
-            lblContra.setTextFill(Color.web("red"));
-        }catch(DAOException e){
-            showErrorAlert("Ha ocurrido un error en el servidor, intentelo otra vez o vuelva mas tarde.");
-        }catch(ServerException e){
-            showErrorAlert("Problemas con el servidor.");
-        }catch(LogicException e){
-            showErrorAlert("Problemas con el servidor, intentelo en un rato.");
-        }catch(EsperaCompletaException e){
-            showErrorAlert("El servidor no se encuentra disponible en estos momentos.");
+            //controller.setUser(user);
+            controller.initStage(root);
+        }catch(Exception e){
+            showErrorAlert("ERROR AL INTENTAR ABRIR LA SIGUIENTE VENTANA "+e.getMessage());
         }
-        */
-        }catch(BusinessLogic e){
-            showErrorAlert(e.getMessage());
+        /*
+        
+        
+        try{
+        // showErrorAlert(clienteLogic.findAll().size()+" en total");
+        //           UserBean user = userLogic.iniciarSesion(nombre, contra);
+        //UserBean user=new UserBean(1,"admin3","administrador@gmail.com","Administrador",ENABLED,ADMIN,"F688ED3E171E7BAD7563C7461404BAB2",new Date(),new Date());
+        // userLogic.updateUser(user);
+        if(user != null){
+        lblNombreUsuario.setTextFill(Color.web("black"));
+        lblContra.setTextFill(Color.web("black"));
+        try{
+        FXMLLoader loader = new FXMLLoader(getClass()
+        .getResource("principal.fxml"));
+        
+        Parent root = (Parent)loader.load();
+        /*
+        PrincipalFXController controller =
+        ((PrincipalFXController)loader.getController());
+        
+        controller.setUser(user);
+        controller.initStage(root);
+        tfContra.setText("");
+        *//*
+        showErrorAlert("todo a ido bien!!");
+        }catch(IOException e){
+        showErrorAlert("Error al cargar la ventana de Login.");
+        }
+        }else{
+        showErrorAlert("Nombre de usuario o contraseña incorrecto.");
         }
         
+        */
+        /*
+        }catch(PasswordException e){
+        showErrorAlert("Contraseña incorrecta.");
+        
+        */ /* MODIFICACIÓN DIN 13/11/2019*//*
+        tfContra.requestFocus();
+        errorContra = true;
+        
+        lblContra.setTextFill(Color.web("red"));
+        }catch(LoginIDException e){
+        showErrorAlert("Nombre de usuario incorrecto.");
+        
+        *//* MODIFICACIÓN DIN 13/11/2019*//*
+        tfNombreUsuario.requestFocus();
+        errorNombre = true;
+        errorContra = true;
+        
+        lblNombreUsuario.setTextFill(Color.web("red"));
+        lblContra.setTextFill(Color.web("red"));
+        }catch(DAOException e){
+        showErrorAlert("Ha ocurrido un error en el servidor, intentelo otra vez o vuelva mas tarde.");
+        }catch(ServerException e){
+        showErrorAlert("Problemas con el servidor.");
+        }catch(LogicException e){
+        showErrorAlert("Problemas con el servidor, intentelo en un rato.");
+        }catch(EsperaCompletaException e){
+        showErrorAlert("El servidor no se encuentra disponible en estos momentos.");
+        }
+        */
+        /*        }catch(BusinessLogic e){
+        showErrorAlert(e.getMessage());
+        }
+        */
     }
     /**
      * Botón para salir de la aplicación.
@@ -378,15 +393,15 @@ public class InicioFXController extends ControladorGeneral{
     public void btnSalirOnClick(ActionEvent event){
         String mensaje = "¿Estás seguro de que desea cerrar la aplicación?";
         Alert alertCerrarAplicacion = new Alert(AlertType.CONFIRMATION,mensaje,ButtonType.NO,ButtonType.YES);
-            //Añadimos titulo a la ventana como el alert.
-            alertCerrarAplicacion.setTitle("Cerrar la aplicación");
-            alertCerrarAplicacion.setHeaderText("¿Quieres salir de la aplicación?");
-            //Si acepta cerrara la aplicación.
-            alertCerrarAplicacion.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
-                    Platform.exit();
-                }
-            });
+        //Añadimos titulo a la ventana como el alert.
+        alertCerrarAplicacion.setTitle("Cerrar la aplicación");
+        alertCerrarAplicacion.setHeaderText("¿Quieres salir de la aplicación?");
+        //Si acepta cerrara la aplicación.
+        alertCerrarAplicacion.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                Platform.exit();
+            }
+        });
     }
     
     /* MODIFICACIÓN DIN 14/11/2019*/
@@ -403,9 +418,9 @@ public class InicioFXController extends ControladorGeneral{
         webEngine.load(url.toString());
         helpStage.setTitle(webEngine.getTitle());
         
-        Button btnCerrarHelp=new Button("Cerrar");        
+        Button btnCerrarHelp=new Button("Cerrar");
         btnCerrarHelp.setOnAction(this::btnCerrarHelpOnAction);
-
+        
         VBox root = new VBox();
         root.getChildren().addAll(browser,btnCerrarHelp);
         
@@ -443,7 +458,7 @@ public class InicioFXController extends ControladorGeneral{
     /**
      * Cierra la ventana de ayuda.
      * Close help window.
-     * @param event propio evento. / The current event. 
+     * @param event propio evento. / The current event.
      */
     public void btnCerrarHelpOnAction(ActionEvent event){
         helpStage.hide();
