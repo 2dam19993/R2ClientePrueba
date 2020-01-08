@@ -26,16 +26,16 @@
             </Menu>
             <Menu fx:id="menuVentanas" mnemonicParsing="false" text="Ventanas">
               <items>
-                  <MenuItem fx:id="menuVentanasMiBiblioteca" mnemonicParsing="false" text="Mi biblioteca" />
-                <MenuItem fx:id="menuVentanasTiendaApuntes" mnemonicParsing="false" text="Tienda de apuntes" />
-                  <MenuItem fx:id="menuVentanasTiendaPacks" mnemonicParsing="false" text="Tienda de packs" />
-                  <MenuItem fx:id="menuVentanasMiPerfil" mnemonicParsing="false" text="Mi perfil" />
-                  <MenuItem fx:id="menuVentanasSubirApunte" mnemonicParsing="false" text="Subir apuntes" />
+                  <MenuItem fx:id="menuVentanasMiBiblioteca" mnemonicParsing="false" text="Mi biblioteca" onAction="#onActionAbrirMiBiblioteca"/>
+                <MenuItem fx:id="menuVentanasTiendaApuntes" mnemonicParsing="false" text="Tienda de apuntes" onAction="#onActionAbrirTiendaApuntes" />
+                  <MenuItem fx:id="menuVentanasTiendaPacks" mnemonicParsing="false" text="Tienda de packs" onAction="#onActionAbrirTiendaPacks"/>
+                  <MenuItem fx:id="menuVentanasMiPerfil" mnemonicParsing="false" text="Mi perfil" onAction="#onActionAbrirMiPerfil"/>
+                  <MenuItem fx:id="menuVentanasSubirApunte" mnemonicParsing="false" text="Subir apuntes" onAction="#onActionAbrirMisApuntes"/>
               </items>
             </Menu>
           <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem fx:id="menuHelpAbout" mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="menuHelpAbout" mnemonicParsing="false" text="About" onAction="#onActionAbout"/>
             </items>
           </Menu>
         </menus>

@@ -5,11 +5,15 @@
  */
 package view;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -82,23 +86,36 @@ public class MisApuntesClienteFXController {
     @FXML
     public void initStage(Parent root) {
         try{
-            LOGGER.info("Iniciando la ventana LogOut");
+            
             Scene scene=new Scene(root);
             stage=new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
-            stage.setTitle("Principal");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Mis apuntes");
             stage.setResizable(true);
+            
             stage.setMaximized(true);
             //Vamos a rellenar los datos en la ventana.
             stage.setOnShowing(this::handleWindowShowing);
             
+            //Mnemonicos
+            //Menu->
             menuCuenta.setMnemonicParsing(true);
             menuCuenta.setText("_Cuenta");
             menuVentanas.setMnemonicParsing(true);
             menuVentanas.setText("_Ventanas");
             menuHelp.setMnemonicParsing(true);
             menuHelp.setText("_Help");
+            //<-Menu
+            btnRefrescar.setMnemonicParsing(true);
+            btnRefrescar.setText("_Refrescar");
+            btnBuscar.setMnemonicParsing(true);
+            btnBuscar.setText("_Buscar");
+            btnModificar.setMnemonicParsing(true);
+            btnModificar.setText("_Modificar");
+            btnSubirApunte.setMnemonicParsing(true);
+            btnSubirApunte.setText("_Subir apunte");
+            
             
             //CARGAR MATERIAS
             //DEJARLO EN TODAS LAS MATERIAS
@@ -114,6 +131,12 @@ public class MisApuntesClienteFXController {
             stage.show();
         }catch(Exception e){
             LOGGER.severe(e.getMessage());
+        }
+        
+    }
+        private void keyPressBuscar(KeyEvent key){
+        if(key.getCode().equals(KeyCode.ENTER)) {
+            btnBuscar.fire();
         }
         
     }
@@ -139,21 +162,102 @@ public class MisApuntesClienteFXController {
         showErrorAlert("Has pulsado SubirApunte");
     }
     @FXML
-    private void onActionSubirModificar(ActionEvent event){
+    private void onActionModificar(ActionEvent event){
         showErrorAlert("Has pulsado Modificar");
     }
+    
+    //Inicio de los metodos de navegación de la aplicación
+    //Parte comun 
     @FXML
     private void onActionCerrarSesion(ActionEvent event){
-        showErrorAlert("Has pulsado CerrarSesion");
+            try{
+            //Creamos la alerta del tipo confirmación.
+            Alert alertCerrarSesion = new Alert(Alert.AlertType.CONFIRMATION);
+            //Ponemos titulo de la ventana como titulo para la alerta.
+            alertCerrarSesion.setTitle("Cerrar sesión");
+            alertCerrarSesion.setHeaderText("¿Quieres cerrar sesión?");
+            //Si acepta se cerrara esta ventana.
+            alertCerrarSesion.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    LOGGER.info("Cerrando sesión.");
+                    stage.hide();
+                }
+            });
+        }catch(Exception e){
+            LOGGER.severe(e.getMessage());
+        }
     }
     @FXML
     private void onActionSalir(ActionEvent event){
-        showErrorAlert("Has pulsado salir");
-    }
-    private void keyPressBuscar(KeyEvent key){
-        if(key.getCode().equals(KeyCode.ENTER)) {
-            btnBuscar.fire();
+           try{
+            //Creamos la alerta con el tipo confirmación, con su texto y botones de
+            //aceptar y cancelar.
+            Alert alertCerrarAplicacion = new Alert(Alert.AlertType.CONFIRMATION,"Si sale de la aplicación cerrara\nautomáticamente la sesión.",ButtonType.NO,ButtonType.YES);
+            //Añadimos titulo a la ventana como el alert.
+            alertCerrarAplicacion.setTitle("Cerrar la aplicación");
+            alertCerrarAplicacion.setHeaderText("¿Quieres salir de la aplicación?");
+            //Si acepta cerrara la aplicación.
+            alertCerrarAplicacion.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    LOGGER.info("Cerrando la aplicación.");
+                    Platform.exit();
+                }
+            });
+        }catch(Exception e){
+            LOGGER.severe(e.getMessage());
         }
-        
+    }
+    
+    //Inicio de los metodos de navegación de la aplicación
+    @FXML
+    private void onActionAbrirMisApuntes(ActionEvent event){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("cliente_misApuntes.fxml"));
+            Parent root = (Parent)loader.load();
+            MisApuntesClienteFXController controller =
+                    ((MisApuntesClienteFXController)loader.getController());
+            
+            //controller.setUser(user);
+            controller.setStage(stage);
+            controller.initStage(root);
+            stage.hide();
+        }catch(Exception e){
+            showErrorAlert("A ocurrido un error, reinicie la aplicación porfavor."+e.getMessage());
+        }
+    }
+    @FXML
+    private void onActionAbrirTiendaApuntes(ActionEvent event){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("tienda_apuntes.fxml"));
+            Parent root = (Parent)loader.load();
+            TiedaApuntesFXController controller =
+                    ((TiedaApuntesFXController)loader.getController());
+            
+            //controller.setUser(user);
+            controller.setStage(stage);
+            controller.initStage(root);
+            stage.hide();
+        }catch(Exception e){
+            showErrorAlert("A ocurrido un error, reinicie la aplicación porfavor."+e.getMessage());
+        }
+    }
+    @FXML
+    private void onActionAbrirMiBiblioteca(ActionEvent event){
+    }
+    @FXML
+    private void onActionAbrirTiendaPacks(ActionEvent event){
+    }
+    @FXML
+    private void onActionAbrirMiPerfil(ActionEvent event){
+    }
+    @FXML
+    private void onActionAbout(ActionEvent event){
+    }
+    //Fin de los metodos de navegación de la aplicación
+    
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
