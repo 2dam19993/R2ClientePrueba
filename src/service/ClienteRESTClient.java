@@ -8,7 +8,6 @@ package service;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:ClienteFacadeREST
@@ -58,11 +57,17 @@ public class ClienteRESTClient {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
+    public <T> T iniciarSesion(Class<T> responseType, String login, String contrasenia) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("iniciarSesion/{0}/{1}", new Object[]{login, contrasenia}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
     public void comprarApunte(Object requestEntity, String idApunte) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("comprar/{0}", new Object[]{idApunte})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
-    public <T> T findAll(GenericType<T> responseType) throws ClientErrorException {
+    public <T> T findAll(Class<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
@@ -74,6 +79,7 @@ public class ClienteRESTClient {
     public <T> boolean passwordForgot(Class<T> responseType, String login) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("passwordForgot/{0}", new Object[]{login}));
+        //return resource.get(responseType);
         return true;
     }
 

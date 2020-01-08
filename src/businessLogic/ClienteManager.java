@@ -5,6 +5,8 @@
  */
 package businessLogic;
 
+import exceptions.LoginNotFoundException;
+import exceptions.PasswordWrongException;
 import java.util.List;
 import java.util.Set;
 import transferObjects.ClienteBean;
@@ -22,6 +24,7 @@ public interface ClienteManager {
     public List <ClienteBean> getVotantesId( Integer id) throws BusinessLogic;
     public void actualizarContrasenia(ClienteBean cliente) throws BusinessLogic;
     public void comprarApunte(ClienteBean cliente, Integer idApunte) throws BusinessLogic;
-    public void passwordForgot( String login) throws BusinessLogic;
+    public boolean passwordForgot( String login) throws BusinessLogic;
+    public ClienteBean iniciarSesion(String login,String contrasenia)throws BusinessLogic, PasswordWrongException, LoginNotFoundException;
     
 }

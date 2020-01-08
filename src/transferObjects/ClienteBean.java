@@ -19,12 +19,12 @@ public class ClienteBean extends UserBean implements Serializable{
     //private static final long serialVersionUID=1L;
     
     
-    private Set <CompraBean> compras;
-    private Set <ApunteBean> apuntes;
-    private Set <ApunteBean> misVotaciones;
+   // private Set <CompraBean> compras;
+   // private Set <ApunteBean> apuntes;
+ //   private Set <ApunteBean> misVotaciones;
     private float saldo;
     private byte[] foto;
-
+/*
     public ClienteBean(Set<CompraBean> compras, Set<ApunteBean> apuntes, Set<ApunteBean> misVotaciones, float saldo, byte[] foto, Integer id, String login, String email, String nombreCompleto, UserStatus status, UserPrivilege privilegio, String contrasenia, Date ultimoAcceso, Date ultimoCambioContrasenia) {
         super(id, login, email, nombreCompleto, status, privilegio, contrasenia, ultimoAcceso, ultimoCambioContrasenia);
         this.compras = compras;
@@ -33,54 +33,14 @@ public class ClienteBean extends UserBean implements Serializable{
         this.saldo = saldo;
         this.foto = foto;
     }
-
+*/
     public ClienteBean() {
     }
 
-    
-
-    
-
-    /**
-     * @return the compras
-     */
-    public Set <CompraBean> getCompras() {
-        return compras;
-    }
-
-    /**
-     * @param compras the compras to set
-     */
-    public void setCompras(Set <CompraBean> compras) {
-        this.compras = compras;
-    }
-
-    /**
-     * @return the apuntes
-     */
-    public Set <ApunteBean> getApuntes() {
-        return apuntes;
-    }
-
-    /**
-     * @param apuntes the apuntes to set
-     */
-    public void setApuntes(Set <ApunteBean> apuntes) {
-        this.apuntes = apuntes;
-    }
-
-    /**
-     * @return the misVotaciones
-     */
-    public Set <ApunteBean> getMisVotaciones() {
-        return misVotaciones;
-    }
-
-    /**
-     * @param misVotaciones the misVotaciones to set
-     */
-    public void setMisVotaciones(Set <ApunteBean> misVotaciones) {
-        this.misVotaciones = misVotaciones;
+    public ClienteBean(float saldo, byte[] foto, Integer id, String login, String email, String nombreCompleto, UserStatus status, UserPrivilege privilegio, String contrasenia, Date ultimoAcceso, Date ultimoCambioContrasenia) {
+        super(id, login, email, nombreCompleto, status, privilegio, contrasenia, ultimoAcceso, ultimoCambioContrasenia);
+        this.saldo = saldo;
+        this.foto = foto;
     }
 
     /**

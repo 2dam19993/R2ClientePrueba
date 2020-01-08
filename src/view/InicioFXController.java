@@ -4,6 +4,7 @@ import businessLogic.*;
 import static businessLogic.ClienteManagerFactory.createClienteManager;
 import static businessLogic.UserManagerFactory.createUserManager;
 import exceptions.LoginNotFoundException;
+import exceptions.NoEsUserException;
 import exceptions.PasswordWrongException;
 import java.net.URL;
 import javafx.application.Platform;
@@ -30,7 +31,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javax.ws.rs.InternalServerErrorException;
+import transferObjects.ClienteBean;
 import transferObjects.UserBean;
 
 /**
@@ -160,7 +161,7 @@ public class InicioFXController extends ControladorGeneral{
         KeyCombination keyCombination = new KeyCodeCombination(KeyCode.F1);
         // Runnable run = ()-> btnAyuda.fire();
         //scene.getAccelerators().put(keyCombination, run);
-//        btnAyuda.setOnAction(this::btnAyudaOnClick);
+        //btnAyuda.setOnAction(this::btnAyudaOnClick);
         btnRegistrar.setMnemonicParsing(true);
         btnRegistrar.setText("_Registrar");
         btnAcceder.setMnemonicParsing(true);
@@ -301,56 +302,81 @@ public class InicioFXController extends ControladorGeneral{
      * @param event El propio evento. / The current event.
      */
     private void btnLoginOnClick(ActionEvent event){;
-        
-        /*
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource("tienda_apuntes.fxml"));
-            Parent root = (Parent)loader.load();
-            TiedaApuntesFXController controller =
-                    ((TiedaApuntesFXController)loader.getController());
+    
+    /*
+    try{
+    FXMLLoader loader = new FXMLLoader(getClass()
+    .getResource("tienda_apuntes.fxml"));
+    Parent root = (Parent)loader.load();
+    TiedaApuntesFXController controller =
+    ((TiedaApuntesFXController)loader.getController());
+    
+    //controller.setUser(user);
+    controller.initStage(root);
+    }catch(Exception e){
+    showErrorAlert("ERROR AL INTENTAR ABRIR LA SIGUIENTE VENTANA "+e.getMessage());
+    }
+    */
+    
+    String nombre = tfNombreUsuario.getText().toString();
+    String contra = tfContra.getText().toString();
+    Object user=null;
+    try{
+        user = userLogic.iniciarSesion(nombre, contra);
+        if(user != null){
+            lblNombreUsuario.setTextFill(Color.web("black"));
+            lblContra.setTextFill(Color.web("black"));
+            UserBean usuario= new UserBean();
+            usuario=(UserBean) user;
+            //abrir admin
+            showErrorAlert("admin");
             
-            //controller.setUser(user);
+            /*
+            try{
+            FXMLLoader loader = new FXMLLoader(getClass()
+            .getResource("principal.fxml"));
+            
+            Parent root = (Parent)loader.load();
+            
+            PrincipalFXController controller =
+            ((PrincipalFXController)loader.getController());
+            controller.setUser(user);
             controller.initStage(root);
-        }catch(Exception e){
-            showErrorAlert("ERROR AL INTENTAR ABRIR LA SIGUIENTE VENTANA "+e.getMessage());
-        }
-        */
-        
-        String nombre = tfNombreUsuario.getText().toString();
-        String contra = tfContra.getText().toString();
-        try{
-            Object user = userLogic.iniciarSesion(nombre, contra);
-            if(user != null){
-                lblNombreUsuario.setTextFill(Color.web("black"));
-                lblContra.setTextFill(Color.web("black"));
-                if(user instanceof UserBean){
-                    //abrir admin
-                    showErrorAlert("admin");
-                }else{
-                    //abrir user
-                    showErrorAlert("user");
-                }
-                /*
-                try{
-                    FXMLLoader loader = new FXMLLoader(getClass()
-                            .getResource("principal.fxml"));
-                    
-                    Parent root = (Parent)loader.load();
-                    
-                    PrincipalFXController controller =
-                            ((PrincipalFXController)loader.getController());
-                    controller.setUser(user);
-                    controller.initStage(root);
-                    tfContra.setText("");
-                }catch(IOException e){
-                    showErrorAlert("Error al cargar la ventana de Login.");
-                }
-                */
-            }else{
-                showErrorAlert("Nombre de usuario o contraseña incorrecto.");
+            tfContra.setText("");
+            }catch(IOException e){
+            showErrorAlert("Error al cargar la ventana de Login.");
             }
-        }catch(PasswordWrongException e){
+            */
+        }else{
+            showErrorAlert("Nombre de usuario o contraseña incorrecto.");
+        }
+    }catch(PasswordWrongException e){
+        showErrorAlert("Contraseña incorrecta.");
+        
+        /* MODIFICACIÓN DIN 13/11/2019*/
+        tfContra.requestFocus();
+        errorContra = true;
+        
+        lblContra.setTextFill(Color.web("red"));
+    }catch(LoginNotFoundException e){
+        showErrorAlert("Nombre de usuario incorrecto.");
+        
+        /* MODIFICACIÓN DIN 13/11/2019*/
+        tfNombreUsuario.requestFocus();
+        errorNombre = true;
+        errorContra = true;
+        
+        lblNombreUsuario.setTextFill(Color.web("red"));
+        lblContra.setTextFill(Color.web("red"));
+    } catch (NoEsUserException ex) {
+        try {
+            user=clienteLogic.iniciarSesion(nombre, contra);
+            ClienteBean cliente=new ClienteBean();
+            cliente=(ClienteBean) user;
+            showErrorAlert(cliente.getLogin()+" "+cliente.getSaldo());
+        } catch (BusinessLogic ex1) {
+            showErrorAlert("Ha ocurrido un error en el servidor, intentelo otra vez o vuelva mas tarde.");
+        } catch (PasswordWrongException ex1) {
             showErrorAlert("Contraseña incorrecta.");
             
             /* MODIFICACIÓN DIN 13/11/2019*/
@@ -358,19 +384,18 @@ public class InicioFXController extends ControladorGeneral{
             errorContra = true;
             
             lblContra.setTextFill(Color.web("red"));
-        }catch(LoginNotFoundException e){
+        } catch (LoginNotFoundException ex1) {
             showErrorAlert("Nombre de usuario incorrecto.");
-            
-            /* MODIFICACIÓN DIN 13/11/2019*/
             tfNombreUsuario.requestFocus();
             errorNombre = true;
             errorContra = true;
             
             lblNombreUsuario.setTextFill(Color.web("red"));
             lblContra.setTextFill(Color.web("red"));
-        } catch (BusinessLogic ex) {
-            showErrorAlert("Ha ocurrido un error en el servidor, intentelo otra vez o vuelva mas tarde.");
         }
+    } catch (BusinessLogic ex) {
+        showErrorAlert("Ha ocurrido un error en el servidor, intentelo otra vez o vuelva mas tarde.");
+    }
     }
     
     /* MODIFICACIÓN DIN 14/11/2019*/
@@ -440,14 +465,14 @@ public class InicioFXController extends ControladorGeneral{
     public void btnSalirOnClick(ActionEvent event){
         String mensaje = "¿Estás seguro de que desea cerrar la aplicación?";
         Alert alertCerrarAplicacion = new Alert(AlertType.CONFIRMATION,mensaje,ButtonType.NO,ButtonType.YES);
-            //Añadimos titulo a la ventana como el alert.
-            alertCerrarAplicacion.setTitle("Cerrar la aplicación");
-            alertCerrarAplicacion.setHeaderText("¿Quieres salir de la aplicación?");
-            //Si acepta cerrara la aplicación.
-            alertCerrarAplicacion.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
-                    Platform.exit();
-                }
-            });
+        //Añadimos titulo a la ventana como el alert.
+        alertCerrarAplicacion.setTitle("Cerrar la aplicación");
+        alertCerrarAplicacion.setHeaderText("¿Quieres salir de la aplicación?");
+        //Si acepta cerrara la aplicación.
+        alertCerrarAplicacion.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                Platform.exit();
+            }
+        });
     }
 }

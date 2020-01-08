@@ -7,8 +7,10 @@ package businessLogic;
 
 
 import exceptions.LoginNotFoundException;
+import exceptions.NoEsUserException;
 import exceptions.PasswordWrongException;
 import java.util.logging.Logger;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
 import service.UserRESTClient;
@@ -48,16 +50,19 @@ public class UserManagerImplementation implements UserManager {
         
     }
     @Override
-    public Object iniciarSesion(String login,String contrasenia)throws BusinessLogic, PasswordWrongException, LoginNotFoundException{
+    public Object iniciarSesion(String login,String contrasenia)throws BusinessLogic, PasswordWrongException, LoginNotFoundException, NoEsUserException{
         Object elUsuario=null;
         try{
-            elUsuario=webClient.iniciarSesion(ClienteBean.class, login, contrasenia);
+            elUsuario=webClient.iniciarSesion(UserBean.class, login, contrasenia);
         }catch(NotAuthorizedException e){
             LOGGER.severe("ERROR! UserManagerImpl -> iniciarSesion: "+e.getMessage()+" "+login+" "+contrasenia);
             throw new PasswordWrongException(e.getMessage());
         }catch(NotFoundException e){
             LOGGER.severe("ERROR! UserManagerImpl -> iniciarSesion: "+e.getMessage()+" "+login+" "+contrasenia);
             throw new LoginNotFoundException(e.getMessage());
+        }catch(BadRequestException e){
+            LOGGER.severe("ERROR! UserManagerImpl -> iniciarSesion: "+e.getMessage());
+            throw new NoEsUserException(e.getMessage());
         }catch(Exception e){
             LOGGER.severe("ERROR! UserManagerImpl -> iniciarSesion: "+e.getMessage());
             throw new BusinessLogic(e.getMessage());

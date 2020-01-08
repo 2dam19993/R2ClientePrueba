@@ -5,10 +5,13 @@
  */
 package businessLogic;
 
+import exceptions.LoginNotFoundException;
+import exceptions.PasswordWrongException;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
-import javax.ws.rs.core.GenericType;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import service.ClienteRESTClient;
 import transferObjects.ClienteBean;
 
@@ -28,7 +31,7 @@ public class ClienteManagerImplementation implements ClienteManager {
         try{
             webClient.create(cliente);
         }catch(Exception e){
-            LOGGER.severe("ERROR! UserManagerImpl -> CreateUser: "+e.getMessage());
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> CreateUser: "+e.getMessage());
             throw new BusinessLogic(e.getMessage());
         }
     }
@@ -38,7 +41,7 @@ public class ClienteManagerImplementation implements ClienteManager {
         try{
             webClient.edit(cliente);
         }catch(Exception e){
-            LOGGER.severe("ERROR! UserManagerImpl -> CreateUser: "+e.getMessage());
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> CreateUser: "+e.getMessage());
             throw new BusinessLogic(e.getMessage());
         }
     }
@@ -48,7 +51,7 @@ public class ClienteManagerImplementation implements ClienteManager {
         try{
            webClient.remove(id.toString());
         }catch(Exception e){
-            LOGGER.severe("ERROR! UserManagerImpl -> CreateUser: "+e.getMessage());
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> CreateUser: "+e.getMessage());
             throw new BusinessLogic(e.getMessage());
         }
     }
@@ -59,7 +62,7 @@ public class ClienteManagerImplementation implements ClienteManager {
         try{
             resultado=webClient.find(ClienteBean.class, id.toString());
         }catch(Exception e){
-            LOGGER.severe("ERROR! UserManagerImpl -> iniciarSesion: "+e.getMessage());
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> iniciarSesion: "+e.getMessage());
             throw new BusinessLogic(e.getMessage());
         }
         return resultado;
@@ -69,9 +72,9 @@ public class ClienteManagerImplementation implements ClienteManager {
     public Set<ClienteBean> findAll() throws BusinessLogic {
         Set<ClienteBean> resultado=null;
         try{
-           resultado=webClient.findAll(new GenericType<Set<ClienteBean>>() {});
+          // resultado=webClient.findAll(new GenericType<Set<ClienteBean>>() {});
         }catch(Exception e){
-            LOGGER.severe("ERROR! UserManagerImpl -> iniciarSesion: "+e.getMessage());
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> iniciarSesion: "+e.getMessage());
             throw new BusinessLogic(e.getMessage());
         }
         return resultado;
@@ -93,8 +96,32 @@ public class ClienteManagerImplementation implements ClienteManager {
     }
 
     @Override
-    public void passwordForgot(String login) throws BusinessLogic {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean passwordForgot(String login) throws BusinessLogic {
+        boolean resultado=false;
+        try{
+           resultado=webClient.passwordForgot(Boolean.class, login);
+        }catch(Exception e){
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> iniciarSesion: "+e.getMessage());
+            throw new BusinessLogic(e.getMessage());
+        }
+        return resultado;
+    }
+    @Override
+    public ClienteBean iniciarSesion(String login,String contrasenia)throws BusinessLogic, PasswordWrongException, LoginNotFoundException{
+        ClienteBean resultado=null;
+        try{
+           resultado=webClient.iniciarSesion(ClienteBean.class, login, contrasenia);
+        }catch(NotAuthorizedException e){
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> iniciarSesion: "+e.getMessage()+" "+login+" "+contrasenia);
+            throw new PasswordWrongException(e.getMessage());
+        }catch(NotFoundException e){
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> iniciarSesion: "+e.getMessage()+" "+login+" "+contrasenia);
+            throw new LoginNotFoundException(e.getMessage());
+        }catch(Exception e){
+            LOGGER.severe("ERROR! ClienteManagerImplementation -> iniciarSesion: "+e.getMessage());
+            throw new BusinessLogic(e.getMessage());
+        }
+        return resultado;
     }
     
 }

@@ -79,7 +79,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="311.0">
                      <children>
-                        <Label fx:id="labelTitulo" alignment="TOP_RIGHT" text="Tus apuntes subidos">
+                        <Label fx:id="labelTitulo" alignment="TOP_RIGHT" text="Tienda de apuntes">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
