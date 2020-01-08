@@ -3,14 +3,13 @@ package view;
 import businessLogic.*;
 import static businessLogic.ClienteManagerFactory.createClienteManager;
 import static businessLogic.UserManagerFactory.createUserManager;
-import java.io.IOException;
+import exceptions.LoginNotFoundException;
+import exceptions.PasswordWrongException;
 import java.net.URL;
-import java.util.Date;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -31,10 +30,8 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.InternalServerErrorException;
 import transferObjects.UserBean;
-import static transferObjects.UserPrivilege.ADMIN;
-import transferObjects.UserStatus;
-import static transferObjects.UserStatus.ENABLED;
 
 /**
  * El controlador de la ventana InicioFx para iniciar sesión.
@@ -164,15 +161,15 @@ public class InicioFXController extends ControladorGeneral{
         // Runnable run = ()-> btnAyuda.fire();
         //scene.getAccelerators().put(keyCombination, run);
 //        btnAyuda.setOnAction(this::btnAyudaOnClick);
-btnRegistrar.setMnemonicParsing(true);
-btnRegistrar.setText("_Registrar");
-btnAcceder.setMnemonicParsing(true);
-btnAcceder.setText("_Acceder");
-btnSalir.setMnemonicParsing(true);
-btnSalir.setText("_Salir");
-tfNombreUsuario.focusedProperty().addListener(this::focusChangedNombre);
-tfContra.focusedProperty().addListener(this::focusChangedContra);
-stage.show();
+        btnRegistrar.setMnemonicParsing(true);
+        btnRegistrar.setText("_Registrar");
+        btnAcceder.setMnemonicParsing(true);
+        btnAcceder.setText("_Acceder");
+        btnSalir.setMnemonicParsing(true);
+        btnSalir.setText("_Salir");
+        tfNombreUsuario.focusedProperty().addListener(this::focusChangedNombre);
+        tfContra.focusedProperty().addListener(this::focusChangedContra);
+        stage.show();
     }
     /**
      * Añade las propiedades a los controladores de la escena.
@@ -303,9 +300,9 @@ stage.show();
      * Login and Password check and login.
      * @param event El propio evento. / The current event.
      */
-    private void btnLoginOnClick(ActionEvent event){
-        String nombre = tfNombreUsuario.getText().toString();
-        String contra = tfContra.getText().toString();
+    private void btnLoginOnClick(ActionEvent event){;
+        
+        /*
         try{
             FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource("tienda_apuntes.fxml"));
@@ -318,90 +315,62 @@ stage.show();
         }catch(Exception e){
             showErrorAlert("ERROR AL INTENTAR ABRIR LA SIGUIENTE VENTANA "+e.getMessage());
         }
-        /*
+        */
         
-        
+        String nombre = tfNombreUsuario.getText().toString();
+        String contra = tfContra.getText().toString();
         try{
-        // showErrorAlert(clienteLogic.findAll().size()+" en total");
-        //           UserBean user = userLogic.iniciarSesion(nombre, contra);
-        //UserBean user=new UserBean(1,"admin3","administrador@gmail.com","Administrador",ENABLED,ADMIN,"F688ED3E171E7BAD7563C7461404BAB2",new Date(),new Date());
-        // userLogic.updateUser(user);
-        if(user != null){
-        lblNombreUsuario.setTextFill(Color.web("black"));
-        lblContra.setTextFill(Color.web("black"));
-        try{
-        FXMLLoader loader = new FXMLLoader(getClass()
-        .getResource("principal.fxml"));
-        
-        Parent root = (Parent)loader.load();
-        /*
-        PrincipalFXController controller =
-        ((PrincipalFXController)loader.getController());
-        
-        controller.setUser(user);
-        controller.initStage(root);
-        tfContra.setText("");
-        *//*
-        showErrorAlert("todo a ido bien!!");
-        }catch(IOException e){
-        showErrorAlert("Error al cargar la ventana de Login.");
-        }
-        }else{
-        showErrorAlert("Nombre de usuario o contraseña incorrecto.");
-        }
-        
-        */
-        /*
-        }catch(PasswordException e){
-        showErrorAlert("Contraseña incorrecta.");
-        
-        */ /* MODIFICACIÓN DIN 13/11/2019*//*
-        tfContra.requestFocus();
-        errorContra = true;
-        
-        lblContra.setTextFill(Color.web("red"));
-        }catch(LoginIDException e){
-        showErrorAlert("Nombre de usuario incorrecto.");
-        
-        *//* MODIFICACIÓN DIN 13/11/2019*//*
-        tfNombreUsuario.requestFocus();
-        errorNombre = true;
-        errorContra = true;
-        
-        lblNombreUsuario.setTextFill(Color.web("red"));
-        lblContra.setTextFill(Color.web("red"));
-        }catch(DAOException e){
-        showErrorAlert("Ha ocurrido un error en el servidor, intentelo otra vez o vuelva mas tarde.");
-        }catch(ServerException e){
-        showErrorAlert("Problemas con el servidor.");
-        }catch(LogicException e){
-        showErrorAlert("Problemas con el servidor, intentelo en un rato.");
-        }catch(EsperaCompletaException e){
-        showErrorAlert("El servidor no se encuentra disponible en estos momentos.");
-        }
-        */
-        /*        }catch(BusinessLogic e){
-        showErrorAlert(e.getMessage());
-        }
-        */
-    }
-    /**
-     * Botón para salir de la aplicación.
-     * Button to exit the application.
-     * @param event El propio evento. / The current event.
-     */
-    public void btnSalirOnClick(ActionEvent event){
-        String mensaje = "¿Estás seguro de que desea cerrar la aplicación?";
-        Alert alertCerrarAplicacion = new Alert(AlertType.CONFIRMATION,mensaje,ButtonType.NO,ButtonType.YES);
-        //Añadimos titulo a la ventana como el alert.
-        alertCerrarAplicacion.setTitle("Cerrar la aplicación");
-        alertCerrarAplicacion.setHeaderText("¿Quieres salir de la aplicación?");
-        //Si acepta cerrara la aplicación.
-        alertCerrarAplicacion.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
-                Platform.exit();
+            Object user = userLogic.iniciarSesion(nombre, contra);
+            if(user != null){
+                lblNombreUsuario.setTextFill(Color.web("black"));
+                lblContra.setTextFill(Color.web("black"));
+                if(user instanceof UserBean){
+                    //abrir admin
+                    showErrorAlert("admin");
+                }else{
+                    //abrir user
+                    showErrorAlert("user");
+                }
+                /*
+                try{
+                    FXMLLoader loader = new FXMLLoader(getClass()
+                            .getResource("principal.fxml"));
+                    
+                    Parent root = (Parent)loader.load();
+                    
+                    PrincipalFXController controller =
+                            ((PrincipalFXController)loader.getController());
+                    controller.setUser(user);
+                    controller.initStage(root);
+                    tfContra.setText("");
+                }catch(IOException e){
+                    showErrorAlert("Error al cargar la ventana de Login.");
+                }
+                */
+            }else{
+                showErrorAlert("Nombre de usuario o contraseña incorrecto.");
             }
-        });
+        }catch(PasswordWrongException e){
+            showErrorAlert("Contraseña incorrecta.");
+            
+            /* MODIFICACIÓN DIN 13/11/2019*/
+            tfContra.requestFocus();
+            errorContra = true;
+            
+            lblContra.setTextFill(Color.web("red"));
+        }catch(LoginNotFoundException e){
+            showErrorAlert("Nombre de usuario incorrecto.");
+            
+            /* MODIFICACIÓN DIN 13/11/2019*/
+            tfNombreUsuario.requestFocus();
+            errorNombre = true;
+            errorContra = true;
+            
+            lblNombreUsuario.setTextFill(Color.web("red"));
+            lblContra.setTextFill(Color.web("red"));
+        } catch (BusinessLogic ex) {
+            showErrorAlert("Ha ocurrido un error en el servidor, intentelo otra vez o vuelva mas tarde.");
+        }
     }
     
     /* MODIFICACIÓN DIN 14/11/2019*/
@@ -462,5 +431,23 @@ stage.show();
      */
     public void btnCerrarHelpOnAction(ActionEvent event){
         helpStage.hide();
+    }
+    /**
+     * Botón para salir de la aplicación.
+     * Button to exit the application.
+     * @param event El propio evento. / The current event.
+     */
+    public void btnSalirOnClick(ActionEvent event){
+        String mensaje = "¿Estás seguro de que desea cerrar la aplicación?";
+        Alert alertCerrarAplicacion = new Alert(AlertType.CONFIRMATION,mensaje,ButtonType.NO,ButtonType.YES);
+            //Añadimos titulo a la ventana como el alert.
+            alertCerrarAplicacion.setTitle("Cerrar la aplicación");
+            alertCerrarAplicacion.setHeaderText("¿Quieres salir de la aplicación?");
+            //Si acepta cerrara la aplicación.
+            alertCerrarAplicacion.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    Platform.exit();
+                }
+            });
     }
 }

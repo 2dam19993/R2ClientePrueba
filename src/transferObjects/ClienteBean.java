@@ -7,10 +7,7 @@ package transferObjects;
 
 import java.io.Serializable;
 import java.util.Date;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.collections.ObservableSet;
+import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -18,95 +15,104 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Usuario
  */
 @XmlRootElement(name="cliente")
-public class ClienteBean extends UserBean {
-    private static final long serialVersionUID=1L;
+public class ClienteBean extends UserBean implements Serializable{
+    //private static final long serialVersionUID=1L;
     
-    private final SimpleSetProperty<CompraBean> compras;
-    private final SimpleSetProperty<ApunteBean> apuntes;
-    private final SimpleSetProperty<ApunteBean> misVotaciones;
-    private final SimpleFloatProperty saldo;
-    private final SimpleObjectProperty<byte[]> foto;
     
+    private Set <CompraBean> compras;
+    private Set <ApunteBean> apuntes;
+    private Set <ApunteBean> misVotaciones;
+    private float saldo;
+    private byte[] foto;
+
+    public ClienteBean(Set<CompraBean> compras, Set<ApunteBean> apuntes, Set<ApunteBean> misVotaciones, float saldo, byte[] foto, Integer id, String login, String email, String nombreCompleto, UserStatus status, UserPrivilege privilegio, String contrasenia, Date ultimoAcceso, Date ultimoCambioContrasenia) {
+        super(id, login, email, nombreCompleto, status, privilegio, contrasenia, ultimoAcceso, ultimoCambioContrasenia);
+        this.compras = compras;
+        this.apuntes = apuntes;
+        this.misVotaciones = misVotaciones;
+        this.saldo = saldo;
+        this.foto = foto;
+    }
+
+    public ClienteBean() {
+    }
+
     
 
-    public ClienteBean(int id, String login, String email, String nombreCompleto, UserStatus status, UserPrivilege privilege, String contrasenia, Date ultimoAcceso, Date ultimoCambioContrasenia,ObservableSet compras, ObservableSet apuntes, ObservableSet misVotaciones,float saldo,byte[] foto) {
-        super(id, login, email, nombreCompleto, status, privilege, contrasenia, ultimoAcceso, ultimoCambioContrasenia);
-        this.compras=new SimpleSetProperty(compras);
-        this.apuntes=new SimpleSetProperty(apuntes);
-        this.misVotaciones=new SimpleSetProperty(misVotaciones);
-        this.saldo=new SimpleFloatProperty(saldo);
-        this.foto=new SimpleObjectProperty(foto);
-    }
+    
 
     /**
      * @return the compras
      */
-    public ObservableSet<CompraBean> getCompras() {
-        return compras.get();
+    public Set <CompraBean> getCompras() {
+        return compras;
     }
 
     /**
      * @param compras the compras to set
      */
-    public void setCompras(ObservableSet<CompraBean> compras) {
-        this.compras.set(compras);
+    public void setCompras(Set <CompraBean> compras) {
+        this.compras = compras;
     }
 
     /**
      * @return the apuntes
      */
-    public ObservableSet<ApunteBean> getApuntes() {
-        return apuntes.get();
+    public Set <ApunteBean> getApuntes() {
+        return apuntes;
     }
 
     /**
      * @param apuntes the apuntes to set
      */
-    public void setApuntes(ObservableSet<ApunteBean> apuntes) {
-        this.apuntes.set(apuntes);
+    public void setApuntes(Set <ApunteBean> apuntes) {
+        this.apuntes = apuntes;
     }
 
     /**
      * @return the misVotaciones
      */
-    public ObservableSet<ApunteBean> getMisVotaciones() {
-        return misVotaciones.get();
+    public Set <ApunteBean> getMisVotaciones() {
+        return misVotaciones;
     }
 
     /**
      * @param misVotaciones the misVotaciones to set
      */
-    public void setMisVotaciones(ObservableSet<ApunteBean> misVotaciones) {
-        this.misVotaciones.set(misVotaciones);
+    public void setMisVotaciones(Set <ApunteBean> misVotaciones) {
+        this.misVotaciones = misVotaciones;
     }
 
     /**
      * @return the saldo
      */
     public float getSaldo() {
-        return saldo.get();
+        return saldo;
     }
 
     /**
      * @param saldo the saldo to set
      */
     public void setSaldo(float saldo) {
-        this.saldo.set(saldo);
+        this.saldo = saldo;
     }
 
     /**
      * @return the foto
      */
     public byte[] getFoto() {
-        return foto.get();
+        return foto;
     }
 
     /**
      * @param foto the foto to set
      */
     public void setFoto(byte[] foto) {
-        this.foto.set(foto);
+        this.foto = foto;
     }
+    
+    
+    
     
     
 }

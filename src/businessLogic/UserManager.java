@@ -5,6 +5,8 @@
  */
 package businessLogic;
 
+import exceptions.LoginNotFoundException;
+import exceptions.PasswordWrongException;
 import transferObjects.UserBean;
 
 /**
@@ -14,5 +16,5 @@ import transferObjects.UserBean;
 public interface UserManager {
     public void createUser(UserBean user) throws BusinessLogic;
     public void updateUser(UserBean user) throws BusinessLogic;
-    public UserBean iniciarSesion(String login,String contrasenia)throws BusinessLogic;
+    public Object iniciarSesion(String login,String contrasenia)throws BusinessLogic, PasswordWrongException, LoginNotFoundException;
 }
