@@ -1,8 +1,8 @@
 /*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package view;
 
 import javafx.application.Platform;
@@ -12,19 +12,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -33,60 +23,13 @@ import static view.ControladorGeneral.showErrorAlert;
 
 /**
  *
- * @author Usuario
+ * @author 2dam
  */
-public class GestorDeApuntesFXController {
-    private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("view.GestorDeApuntesFXController");
+public class GestorDeOfertasFXController {
+    private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("view.GestorDeOfertasFXController");
     private UserBean user;
     private Stage stage;
-    @FXML
-    private TableView tableApuntes;
-    @FXML
-    private TableColumn clId;
-    @FXML
-    private TableColumn clTitulo;
-    @FXML
-    private TableColumn clDesc;
-    @FXML
-    private TableColumn clFechaValidacion;
-    @FXML
-    private TableColumn clLikes;
-    @FXML
-    private TableColumn clPrecio;
-    @FXML
-    private TableColumn clCreador;
-    @FXML
-    private TableColumn clVendidos;
-    @FXML
-    private TableColumn clMateria;
-    @FXML
-    private Button btnRefrescar;
-    @FXML
-    private Button btnCargarDatos;
-    @FXML
-    private Button btnModificar;
-    @FXML
-    private Button btnBorrar;
-    @FXML
-    private Button btnInforme;
-    @FXML
-    private TextField textFieldTitulo;
-    @FXML
-    private TextArea textFieldDesc;
-    @FXML
-    private DatePicker datePickerFecha;
-    @FXML
-    private ComboBox comboBoxMaterias;
-    @FXML
-    private Label labelTitulo;
-    @FXML
-    private Label labelDesc;
-    @FXML
-    private Label labelFecha;
-    @FXML
-    private Label labelMateria;
-    @FXML
-    private MenuBar menuBar;
+    
     @FXML
     private Menu menuCuenta;
     @FXML
@@ -151,6 +94,7 @@ public class GestorDeApuntesFXController {
     public void setUser(UserBean user){
         this.user=user;
     }
+    
     //Parte comun
     @FXML
     private void onActionCerrarSesion(ActionEvent event){

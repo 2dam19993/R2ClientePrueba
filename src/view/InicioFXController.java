@@ -6,11 +6,13 @@ import static businessLogic.UserManagerFactory.createUserManager;
 import exceptions.LoginNotFoundException;
 import exceptions.NoEsUserException;
 import exceptions.PasswordWrongException;
+import java.io.IOException;
 import java.net.URL;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -31,6 +33,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.glassfish.hk2.utilities.reflection.Logger;
 import transferObjects.ClienteBean;
 import transferObjects.UserBean;
 
@@ -40,6 +43,7 @@ import transferObjects.UserBean;
  * @author Luis
  */
 public class InicioFXController extends ControladorGeneral{
+    private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("view.GestorDeApuntesFXController");
     /* MODIFICACIÓN DIN 14/11/2019 */
     /**
      * Botón Ayuda.
@@ -331,22 +335,24 @@ public class InicioFXController extends ControladorGeneral{
             //abrir admin
             showErrorAlert("admin");
             
-            /*
+            
             try{
-            FXMLLoader loader = new FXMLLoader(getClass()
-            .getResource("principal.fxml"));
-            
-            Parent root = (Parent)loader.load();
-            
-            PrincipalFXController controller =
-            ((PrincipalFXController)loader.getController());
-            controller.setUser(user);
-            controller.initStage(root);
-            tfContra.setText("");
+                FXMLLoader loader = new FXMLLoader(getClass()
+                .getResource("gestor_de_apuntes.fxml"));
+
+                Parent root = (Parent)loader.load();
+
+                GestorDeApuntesFXController controller =
+                ((GestorDeApuntesFXController)loader.getController());
+                controller.setUser(usuario);
+                controller.initStage(root);
+                tfContra.setText("");
             }catch(IOException e){
-            showErrorAlert("Error al cargar la ventana de Login.");
+                 showErrorAlert("Error al cargar la ventana de Login.");
+                 LOGGER.severe("Error "+e.getMessage());
+                 
             }
-            */
+            
         }else{
             showErrorAlert("Nombre de usuario o contraseña incorrecto.");
         }
